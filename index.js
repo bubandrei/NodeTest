@@ -17,6 +17,11 @@ connection.connect((err) => {
         console.log('DataBase sacceded');
     }
 });
+connection.query("SELECT * FROM users", (err, results, fields) => {
+    console.log(err);
+    console.log(results);
+    // console.log(fields);
+})
 
 const app = express();
 app.use(express.json());
