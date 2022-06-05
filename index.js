@@ -21,7 +21,8 @@ connection.query("SELECT * FROM users", (err, results, fields) => {
     console.log(err);
     console.log(results);
     // console.log(fields);
-})
+});
+connection.end();
 
 const app = express();
 app.use(express.json());
