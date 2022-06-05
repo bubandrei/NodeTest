@@ -1,16 +1,16 @@
 import express from "express";
-import mysql from 'mysql';
+import mysql from 'mysql2';
 
 const PORT = 3000;
 
-const mysqlConnection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'Users'
+    password: 'Ba28051984!',
+    database: 'usersdb'
 
 });
-mysqlConnection.connect((err) => {
+connection.connect((err) => {
     if (err) {
         console.log('ERROR');
     } else {
