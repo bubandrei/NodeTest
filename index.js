@@ -1,17 +1,9 @@
 import express from "express";
-import mysql from 'mysql2';
 import __dirname from './__dirname.js';
 import bodyParser from 'body-parser';
+import connection from "./usersDB.js";
 
 const PORT = 3000;
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Ba28051984!',
-    database: 'usersdb'
-
-});
 
 const app = express();
 app.use(express.json());
@@ -26,23 +18,36 @@ app.get('/get/', (req, res) => {
         res.send(data);
     });
 });
-
 app.get('/', (req, res) => {
     res.status(200);
     res.sendFile(__dirname + '/index.html');
 })
 app.post('/target/', async (req, res) => {
-    if (!req.body) {
-        res.sendStatus(400);
+    try {
+        if (!req.body) {
+            res.sendStatus(400);
+        }
+        const { email, firstName, lastName, image, pdf } = req.body;
+        connection.query("INSERT INTO users (email, firstName, lastName, image, pdf) VALUES (?,?,?,?,?)",
+            [email, firstName, lastName, image, pdf], (err, data) => {
+                if (err)
+                    return console.log(err);
+            })
+        res.send("Server is working");
+    } catch (e) {
+        res.status(500);
     }
-    const { email, firstName, lastName, image, pdf } = req.body;
-    connection.query("INSERT INTO users (email, firstName, lastName, image, pdf) VALUES (?,?,?,?,?)",
-        [email, firstName, lastName, image, pdf], (err, data) => {
-            if (err)
-                return console.log(err);
-        })
-    res.send("Server is working");
-})
+});
+app.post('/find/', (req, res) => {
+    console.log(req.body.email);
+    const email = req.body.email;
+    connection.query("SELECT * FROM users WHERE email=?", [email], (err, data) => {
+        if (err) return console.log(err);
+        console.log(data)
+        res.send(data);
+    });
+});
+
 
 async function start() {
     try {
