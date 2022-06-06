@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import connection from "./usersDB.js";
 
 const PORT = 3000;
+const sql = `SELECT * FROM users`;
 
 const app = express();
 app.use(express.json());
@@ -16,7 +17,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 })
 app.get('/get/', (req, res) => {
-    connection.query("SELECT * FROM users", (err, data) => {
+    connection.query(sql, (err, data) => {
         console.log(data);
         if (err) return console.log(err);
         res.send(data);
@@ -39,8 +40,17 @@ app.post('/find/', (req, res) => {
     const email = req.body.email;
     connection.query("SELECT * FROM users WHERE email=?", [email], (err, data) => {
         if (err) return console.log(err);
-        console.log(data)
         res.send(data);
+        
+    });
+});
+app.post('/update/', (req, res) => {
+    const email = req.body.email;
+    connection.query("SELECT * FROM users WHERE email=?", [email], (err, data) => {
+        if (err) return console.log(err);
+        console.log(data)
+        res.sendFile(__dirname + '/edit.html');
+        
     });
 });
 
