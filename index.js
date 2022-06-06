@@ -41,7 +41,7 @@ app.post('/target/', (req, res) => {
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
-    connection.query("INSERT INTO users (name, age) VALUES (?,?)", [name, age], (err, data) => {
+    connection.query("INSERT INTO users (email, firstName,lastName) VALUES (?,?,?)", [email, firstName, lastName], (err, data) => {
         if (err) return console.log(err);
         res.redirect("/");
     })
