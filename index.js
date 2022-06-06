@@ -48,6 +48,15 @@ app.post('/find/', (req, res) => {
     });
 });
 
+app.post('/delete/', (req, res) => {
+    console.log(req.body.email);
+    const email = req.body.email;
+    connection.query("DELETE FROM users WHERE email=?", [email], (err, data) => {
+        if (err) return console.log(err);
+        console.log(data)
+        res.send('User' + ' ' + email + ' ' + 'delete');
+    });
+});
 
 async function start() {
     try {
