@@ -1,6 +1,7 @@
 import express from "express";
 import mysql from 'mysql2';
 import __dirname from './__dirname.js';
+import bodyParser from 'body-parser';
 
 const PORT = 3000;
 
@@ -14,20 +15,37 @@ const connection = mysql.createConnection({
 
 const app = express();
 app.use(express.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-// app.get('/', (req, res) => {
-//     // console.log(req.query);
-//     res.status(200).json("Server is working");
-// });
+app.get('/get/', (req, res) => {
+    connection.query("SELECT * FROM users", (err, data) => {
+        console.log(data);
+        if (err) return console.log(err);
+        res.send(data);
+        // res.render("index.html", {
+        //     users: data
+        // });
+    });
+});
+
 app.get('/', (req, res) => {
-    console.log(req.query);
     res.status(200);
-    console.log(__dirname);
-    res.sendFile(__dirname +'/index.html');
+    res.sendFile(__dirname + '/index.html');
 })
-
-app.post('/', (req, res) => {
-    // console.log(req.body);
+app.post('/target/', (req, res) => {
+    if (!req.body) {
+        res.sendStatus(400);
+    }
+    const email = req.body.email;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    connection.query("INSERT INTO users (name, age) VALUES (?,?)", [name, age], (err, data) => {
+        if (err) return console.log(err);
+        res.redirect("/");
+    })
+    console.log(req.body);
     res.status(200).json("Server is working");
 })
 
@@ -48,8 +66,8 @@ async function start() {
     }
 };
 start();
-connection.query("SELECT * FROM users", (err, results) => {
-    // console.log(err);
-    // console.log(results);
-});
-connection.end();
+// connection.query("SELECT * FROM users", (err, results) => {
+//     console.log(err);
+//     console.log(results);
+// });
+// connection.end();
