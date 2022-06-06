@@ -10,19 +10,13 @@ const connection = mysql.createConnection({
     database: 'usersdb'
 
 });
-connection.connect((err) => {
-    if (err) {
-        console.log('ERROR');
-    } else {
-        console.log('DataBase sacceded');
-    }
-});
-connection.query("SELECT * FROM users", (err, results, fields) => {
-    console.log(err);
-    console.log(results);
-    // console.log(fields);
-});
-connection.end();
+// connection.connect((err) => {
+//     if (err) {
+//         console.log('ERROR');
+//     } else {
+//         console.log('DataBase sacceded');
+//     }
+// });
 
 const app = express();
 app.use(express.json());
@@ -37,13 +31,20 @@ app.post('/', (req, res) => {
     res.status(200).json("Server is working");
 })
 
-const start = () => {
+async function start() {
     try {
+        connection.connect();
         app.listen(PORT, () => {
             console.log(`Running port ${PORT}`);
         })
     } catch (e) {
         console.log(e);
     }
-}
+};
 start();
+connection.query("SELECT * FROM users", (err, results) => {
+    // console.log(err);
+    // console.log(results);
+});
+connection.end();
+
