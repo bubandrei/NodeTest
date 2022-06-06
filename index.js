@@ -15,11 +15,11 @@ const connection = mysql.createConnection({
 const app = express();
 app.use(express.json());
 
+// app.get('/', (req, res) => {
+//     // console.log(req.query);
+//     res.status(200).json("Server is working");
+// });
 app.get('/', (req, res) => {
-    // console.log(req.query);
-    res.status(200).json("Server is working");
-});
-app.get('/index/', (req, res) => {
     console.log(req.query);
     res.status(200);
     console.log(__dirname);
