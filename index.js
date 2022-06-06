@@ -24,9 +24,6 @@ app.get('/get/', (req, res) => {
         console.log(data);
         if (err) return console.log(err);
         res.send(data);
-        // res.render("index.html", {
-        //     users: data
-        // });
     });
 });
 
@@ -34,19 +31,17 @@ app.get('/', (req, res) => {
     res.status(200);
     res.sendFile(__dirname + '/index.html');
 })
-app.post('/target/', (req, res) => {
+app.post('/target/', async (req, res) => {
     if (!req.body) {
         res.sendStatus(400);
     }
-    const email = req.body.email;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    connection.query("INSERT INTO users (email, firstName,lastName) VALUES (?,?,?)", [email, firstName, lastName], (err, data) => {
-        if (err) return console.log(err);
-        res.redirect("/");
-    })
-    console.log(req.body);
-    res.status(200).json("Server is working");
+    const { email, firstName, lastName, image, pdf } = req.body;
+    connection.query("INSERT INTO users (email, firstName, lastName, image, pdf) VALUES (?,?,?,?,?)",
+        [email, firstName, lastName, image, pdf], (err, data) => {
+            if (err)
+                return console.log(err);
+        })
+    res.send("Server is working");
 })
 
 async function start() {
